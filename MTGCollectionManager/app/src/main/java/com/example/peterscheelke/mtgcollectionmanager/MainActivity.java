@@ -1,16 +1,9 @@
 package com.example.peterscheelke.mtgcollectionmanager;
 
-import android.content.res.AssetManager;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import com.example.peterscheelke.mtgcollectionmanager.DatabaseManagement.DataBaseHelper;
 
 public class MainActivity extends AppCompatActivity {
 

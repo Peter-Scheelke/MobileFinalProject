@@ -1,4 +1,4 @@
-package com.example.peterscheelke.mtgcollectionmanager;
+package com.example.peterscheelke.mtgcollectionmanager.DatabaseManagement;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,13 +10,13 @@ import android.util.Log;
 public class DatabaseManager
 {
     /*
-    // The single instance of the com.example.peterscheelke.mtgcollectionmanager.DatabaseManager class
+    // The single instance of the com.example.peterscheelke.mtgcollectionmanager.DatabaseManagement.DatabaseManager class
     private static DatabaseManager uniqueInstance;
 
     // The database containing the MTG cards
     private static final String DATABASE = "mtgdatabase";
 
-    // Used to make sure the com.example.peterscheelke.mtgcollectionmanager.DatabaseManager is correctly synchronized
+    // Used to make sure the com.example.peterscheelke.mtgcollectionmanager.DatabaseManagement.DatabaseManager is correctly synchronized
     private static Object databaseLock = new Object();
 
     // Used to access the database of MTG cards
@@ -25,14 +25,14 @@ public class DatabaseManager
     // The database of MTG cards
     private SQLiteDatabase database = null;
 
-    // Prevents a default instance of com.example.peterscheelke.mtgcollectionmanager.DatabaseManager
+    // Prevents a default instance of com.example.peterscheelke.mtgcollectionmanager.DatabaseManagement.DatabaseManager
     // from being created
     private DatabaseManager(Context context)
     {
         helper = new DBHelper(context);
     }
 
-    // Gets a reference to the single com.example.peterscheelke.mtgcollectionmanager.DatabaseManager object
+    // Gets a reference to the single com.example.peterscheelke.mtgcollectionmanager.DatabaseManagement.DatabaseManager object
     public static DatabaseManager GetManager(Context context)
     {
         synchronized (databaseLock)

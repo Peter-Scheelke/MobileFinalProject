@@ -1,4 +1,4 @@
-package com.example.peterscheelke.mtgcollectionmanager;
+package com.example.peterscheelke.mtgcollectionmanager.DatabaseManagement;
 
 
 import android.database.Cursor;

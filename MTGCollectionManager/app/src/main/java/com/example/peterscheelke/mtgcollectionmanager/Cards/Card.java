@@ -1,0 +1,36 @@
+package com.example.peterscheelke.mtgcollectionmanager.Cards;
+
+import java.util.ArrayList;
+
+/**
+ * Created by Peter Scheelke on 11/29/2016.
+ */
+
+public class Card
+{
+    public String Name = "";
+
+    public String ManaCost = "";
+
+    public Double CMC = 0.0;
+
+    public String Type = "";
+
+    public String Text = "";
+
+    public String Power = "";
+
+    public String Toughness = "";
+
+    public ArrayList<String> Types = null;
+
+    public ArrayList<String> Subtypes = null;
+
+    public ArrayList<Color> Colors = null;
+
+    public ArrayList<Color> ColorIdentity = null;
+
+    public int DeckQuantity = 0;
+
+    public int CollectionQuantity = 0;
+}
