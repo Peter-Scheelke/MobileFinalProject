@@ -13,5 +13,7 @@ public enum Color {
 
     Red,
 
-    White
+    White,
+
+    None
 }

@@ -1,7 +1,6 @@
 package com.example.peterscheelke.mtgcollectionmanager.DatabaseManagement;
 
 import com.example.peterscheelke.mtgcollectionmanager.Cards.Card;
-import com.example.peterscheelke.mtgcollectionmanager.Cards.Color;
 
 /**
  * Created by Peter Scheelke on 12/2/2016.
@@ -17,16 +16,12 @@ class QueryFactory
     private static final String COLOR_IDENTITIES = "ColorIdentities";
 
     // Columns
-    private static final String CARD_COLUMNS = "Layout, Name, ManaCost, CMC, Type AS CompleteType, Text, Power, Toughness, ImageName";
+    private static final String CARD_COLUMNS = "Layout, Name, ManaCost, CMC, CompleteType, Text, Power, Toughness, ImageName";
 
     // Query strings
     private static final String BASE_QUERY = "SELECT %1$s FROM %2$s";
-
     private static final String JOIN_QUERY = "SELECT %1$s FROM (%2$s) AS temp JOIN %3$s ON Card = Name";
-
-
-    // Get data from card table
-    // (SELECT Layout, Name, ManaCost, CMC, Type AS CompleteType, Text, Power, Toughness, ImageName FROM %0$s);
+    private static final String SELECT_QUERY = "SELECT %1$s FROM %2$s WHERE %3$s = '%4$s'";
 
 
     // JOIN for colors
@@ -47,27 +42,45 @@ class QueryFactory
             {
                 columns += ", Type";
                 queryString = String.format(JOIN_QUERY, columns, queryString, TYPES);
+                queryString += " WHERE Name IN (" + String.format(SELECT_QUERY, "Card", "Types", "Type", card.Types.get(0)) + ")";
+                for (int i = 1; i < card.Types.size(); ++i)
+                {
+                    queryString += " AND Name IN (" + String.format(SELECT_QUERY, "Card", "Types", "Type", card.Types.get(i)) + ")";
+                }
             }
 
+            // private static final String SELECT_QUERY = "SELECT %1$s FROM %2$s WHERE %3$s = '%4$s'";
             if (card.Subtypes != null && card.Subtypes.size() > 0)
             {
                 columns += ", Subtype";
                 queryString = String.format(JOIN_QUERY, columns, queryString, SUBTYPES);
+                queryString += " WHERE Name IN (" + String.format(SELECT_QUERY, "Card", "Subtypes", "Subtype", card.Subtypes.get(0)) + ")";
+                for (int i = 1; i < card.Subtypes.size(); ++i)
+                {
+                    queryString += " AND Name IN (" + String.format(SELECT_QUERY, "Card", "Subtypes", "Subtype", card.Subtypes.get(i)) + ")";
+                }
             }
 
             if (card.Colors != null && card.Colors.size() > 0)
             {
                 columns += ", Color";
                 queryString = String.format(JOIN_QUERY, columns, queryString, COLORS);
+                queryString += " WHERE Name IN (" + String.format(SELECT_QUERY, "Card", "Colors", "Color", card.Colors.get(0).toString()) + ")";
+                for (int i = 1; i < card.Colors.size(); ++i)
+                {
+                    queryString += " AND Name IN (" + String.format(SELECT_QUERY, "Card", "Colors", "Color", card.Colors.get(i).toString()) + ")";
+                }
             }
 
             if (card.ColorIdentity != null)
             {
                 columns += ", ColorIdentity";
-                for (Color color: card.Colors) {
-
-                }
                 queryString = String.format(JOIN_QUERY, columns, queryString, COLOR_IDENTITIES);
+                queryString += " WHERE Name IN (" + String.format(SELECT_QUERY, "Card", "ColorIdentities", "ColorIdentity", card.ColorIdentity.get(0).toString()) + ")";
+                for (int i = 1; i < card.ColorIdentity.size(); ++i)
+                {
+                    queryString += " AND Name IN (" + String.format(SELECT_QUERY, "Card", "ColorIdentities", "ColorIdentity", card.ColorIdentity.get(i).toString()) + ")";
+                }
             }
         }
 

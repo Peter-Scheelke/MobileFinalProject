@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.peterscheelke.mtgcollectionmanager.Cards.Card;
+import com.example.peterscheelke.mtgcollectionmanager.Cards.Color;
 import com.example.peterscheelke.mtgcollectionmanager.DatabaseManagement.DatabaseManager;
 
 import java.util.ArrayList;
@@ -23,9 +24,17 @@ public class MainActivity extends AppCompatActivity {
 
             Card card = new Card();
             card.ColorIdentity = new ArrayList<>();
-            card.Colors = new ArrayList<>();
-            card.Types = new ArrayList<>();
-            card.Subtypes = new ArrayList<>();
+            card.ColorIdentity.add(Color.Black);
+
+            //card.Colors = new ArrayList<>();
+            //card.Colors.add(Color.Black);
+            //card.Colors.add(Color.Blue);
+            //card.Colors.add(Color.White);
+            //card.Colors.add(Color.Red);
+
+
+            //card.Types = new ArrayList<>();
+            //card.Subtypes = new ArrayList<>();
             List<String> names = manager.GetAllCardNames(card);
             Log.d("Names", "onCreate: " + Integer.toString(names.size()));
         } catch (Exception e) {

@@ -28,7 +28,7 @@ public class Card
 
     public ArrayList<Color> Colors = null;
 
-    public ArrayList<ColorIdentity> ColorIdentity = null;
+    public ArrayList<Color> ColorIdentity = null;
 
     public int DeckQuantity = 0;
 
