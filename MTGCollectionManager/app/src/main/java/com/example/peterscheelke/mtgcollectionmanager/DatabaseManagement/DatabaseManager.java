@@ -6,51 +6,50 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // A singleton class that accesses the database of MTG cards
 public class DatabaseManager
 {
-    /*
-    // The single instance of the com.example.peterscheelke.mtgcollectionmanager.DatabaseManagement.DatabaseManager class
     private static DatabaseManager uniqueInstance;
 
-    // The database containing the MTG cards
-    private static final String DATABASE = "mtgdatabase";
+    private DataBaseHelper helper;
 
-    // Used to make sure the com.example.peterscheelke.mtgcollectionmanager.DatabaseManagement.DatabaseManager is correctly synchronized
-    private static Object databaseLock = new Object();
-
-    // Used to access the database of MTG cards
-    private SQLiteOpenHelper helper;
-
-    // The database of MTG cards
-    private SQLiteDatabase database = null;
-
-    // Prevents a default instance of com.example.peterscheelke.mtgcollectionmanager.DatabaseManagement.DatabaseManager
-    // from being created
     private DatabaseManager(Context context)
     {
-        helper = new DBHelper(context);
+        this.helper = new DataBaseHelper(context);
     }
 
-    // Gets a reference to the single com.example.peterscheelke.mtgcollectionmanager.DatabaseManagement.DatabaseManager object
-    public static DatabaseManager GetManager(Context context)
+    public static void InitializeManager(Context context)
     {
-        synchronized (databaseLock)
+        if (uniqueInstance == null)
         {
-            if (uniqueInstance == null)
-            {
-                uniqueInstance = new DatabaseManager(context);
-            }
-
-            return uniqueInstance;
+            uniqueInstance = new DatabaseManager(context);
+        }
+        else
+        {
+            uniqueInstance.helper.close();
+            uniqueInstance.helper = new DataBaseHelper(context);
         }
     }
 
-    public void Test()
+    public static DatabaseManager GetManager()
     {
-        synchronized (databaseLock)
-        {
+        return uniqueInstance;
+    }
 
+    public List<String> GetAllCardNames()
+    {
+        this.helper.openDataBase();
+        Cursor cursor = this.helper.executeQuery("SELECT Name FROM Cards", null);
+        List<String> names = new ArrayList<String>();
+        while (cursor.moveToNext())
+        {
+            names.add(cursor.getString(0));
         }
-    }*/
+
+        this.helper.close();
+        return names;
+    }
 }

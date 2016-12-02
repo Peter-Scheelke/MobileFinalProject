@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 
-public class DataBaseHelper extends SQLiteOpenHelper{
+class DataBaseHelper extends SQLiteOpenHelper{
 
     //The Android's default system path of your application database.
     private static String DB_PATH = "/data/data/com.example.peterscheelke.mtgcollectionmanager/databases/";
@@ -61,7 +61,6 @@ public class DataBaseHelper extends SQLiteOpenHelper{
             } catch (IOException e) {
 
                 throw new Error("Error copying database");
-
             }
         }
 
@@ -76,27 +75,6 @@ public class DataBaseHelper extends SQLiteOpenHelper{
         File dbFile = new File(DB_PATH + DB_NAME);
         boolean blah = dbFile.exists();
         return dbFile.exists();
-
-/*
-        SQLiteDatabase checkDB = null;
-
-        try{
-            String myPath = DB_PATH + DB_NAME;
-            checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-
-        }catch(SQLiteException e){
-
-            //database does't exist yet.
-
-        }
-
-        if(checkDB != null){
-
-            checkDB.close();
-
-        }
-
-        return checkDB != null ? true : false;*/
     }
 
     /**
@@ -157,19 +135,17 @@ public class DataBaseHelper extends SQLiteOpenHelper{
 
     }
 
-    // Add your public helper methods to access and get content from the database.
-    // You could return cursors by doing "return myDataBase.query(....)" so it'd be easy
-    // to you to create adapters for your views.
-
-    public void TestStuff()
+    public Cursor executeQuery(String query, String[] parameters)
     {
-        String command = "SELECT Name FROM Cards WHERE Name like '%Lightning%'";
-        String[] parameters = new String[] {};
+        return myDataBase.rawQuery(query, parameters);
+    }
 
-        Cursor cursor = myDataBase.rawQuery(command, parameters);
-        while (cursor.moveToNext())
-        {
-            Log.d("PLEAAAASE!", "TestStuff: " + cursor.getString(0));
+    public boolean executeNonQuery(String nonQuery, String[] parameters) {
+        try {
+            myDataBase.execSQL(nonQuery, parameters);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 }
