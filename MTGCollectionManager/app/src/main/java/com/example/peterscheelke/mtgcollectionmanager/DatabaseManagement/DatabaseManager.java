@@ -6,6 +6,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.peterscheelke.mtgcollectionmanager.Cards.Card;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +19,13 @@ public class DatabaseManager
 
     private DataBaseHelper helper;
 
-    private DatabaseManager(Context context)
+    private DatabaseManager(Context context) throws IOException
     {
         this.helper = new DataBaseHelper(context);
+        this.helper.createDataBase();
     }
 
-    public static void InitializeManager(Context context)
+    public static void InitializeManager(Context context) throws IOException
     {
         if (uniqueInstance == null)
         {
@@ -39,11 +43,14 @@ public class DatabaseManager
         return uniqueInstance;
     }
 
-    public List<String> GetAllCardNames()
+    public List<String> GetAllCardNames(Card searchCard)
     {
+        QueryFactory factory = new QueryFactory();
+        Query query = factory.CreateQuery(searchCard, false);
+
         this.helper.openDataBase();
-        Cursor cursor = this.helper.executeQuery("SELECT Name FROM Cards", null);
-        List<String> names = new ArrayList<String>();
+        Cursor cursor = this.helper.executeQuery(query.query, query.parameters);
+        List<String> names = new ArrayList<>();
         while (cursor.moveToNext())
         {
             names.add(cursor.getString(0));
