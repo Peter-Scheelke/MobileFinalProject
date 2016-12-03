@@ -12,9 +12,9 @@ public class Card
 
     public String ManaCost = "";
 
-    public Double CMC = 0.0;
+    public Double CMC = -1.0;
 
-    public String Type = "";
+    public String CompleteType = "";
 
     public String Text = "";
 
