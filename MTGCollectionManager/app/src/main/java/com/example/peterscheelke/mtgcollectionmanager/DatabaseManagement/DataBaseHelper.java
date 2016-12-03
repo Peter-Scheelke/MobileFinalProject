@@ -141,10 +141,12 @@ class DataBaseHelper extends SQLiteOpenHelper{
     }
 
     public boolean executeNonQuery(String nonQuery, String[] parameters) {
-        try {
+        try
+        {
             myDataBase.execSQL(nonQuery, parameters);
             return true;
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             return false;
         }
     }
