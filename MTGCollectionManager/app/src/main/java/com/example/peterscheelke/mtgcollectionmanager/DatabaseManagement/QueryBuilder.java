@@ -44,13 +44,35 @@ class QueryBuilder
         queryString = GetQueryFromCardArgs(card, queryString, searches, parameters);
         queryString = getQueryFromJoins(card, columns, queryString, parameters);
 
-        queryString += " WHERE Quantity >= ?";
-        parameters.add(Integer.toString(card.CollectionQuantity));
+        if (this.HasWhere(card))
+        {
+            queryString += " AND Quantity >= ?";
+        }
+        else
+        {
+            queryString += " WHERE Quantity >= ?";
+        }
 
+        parameters.add(Integer.toString(card.CollectionQuantity));
         Query query = new Query();
         query.query = queryString + ";";
         query.parameters = parameters.toArray(new String[0]);
         return query;
+    }
+
+    private boolean HasWhere(Card card)
+    {
+        if (card != null) {
+            if (card.Name != "") return true;
+            if (card.ManaCost != "") return true;
+            if (card.CMC >= 0.0) return true;
+            if (card.CompleteType != "") return true;
+            if (card.Text != "") return true;
+            if (card.Power != "") return true;
+            if (card.Toughness != "") return true;
+        }
+
+        return false;
     }
 
     @NonNull
@@ -106,6 +128,7 @@ class QueryBuilder
 
             queryString += whereClause.toString();
         }
+
         return queryString;
     }
 

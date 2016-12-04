@@ -52,12 +52,11 @@ public class DatabaseManager
     {
         QueryBuilder factory = new QueryBuilder();
         Query query = factory.CreateQuery(searchCard);
-        List<Tuple<String, Integer>> names = null;
+        List<Tuple<String, Integer>> names = new ArrayList<>();
         try
         {
             this.helper.openDataBase();
             Cursor cursor = this.helper.executeQuery(query.query, query.parameters);
-            names = new ArrayList<>();
             while (cursor.moveToNext())
             {
                 Tuple<String, Integer> nameQuantity = new Tuple<>(cursor.getString(0), cursor.getInt(1));
