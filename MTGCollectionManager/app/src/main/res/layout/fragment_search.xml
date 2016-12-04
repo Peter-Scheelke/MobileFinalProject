@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/line1LinearLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true">
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:inputType="text"
+                        android:ems="10"
+                        android:id="@+id/cardNameEditText"
+                        android:hint="Card Name" />
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.3"
+                        android:inputType="numberDecimal"
+                        android:ems="10"
+                        android:id="@+id/cmcEditText"
+                        android:hint="CMC" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/line2LinearLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/line1LinearLayout">
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:inputType="text"
+                        android:ems="10"
+                        android:id="@+id/typesEditText"
+                        android:hint="Types" />
+
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.3"
+                        android:ems="10"
+                        android:id="@+id/powerEditText"
+                        android:inputType="text"
+                        android:hint="Power" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/line3LinearLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/line2LinearLayout">
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:inputType="text"
+                        android:ems="10"
+                        android:id="@+id/subtypesEditText"
+                        android:hint="Subtypes" />
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.3"
+                        android:ems="10"
+                        android:id="@+id/toughnessEditText"
+                        android:inputType="text"
+                        android:hint="Toughness" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:text="Color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/colorsTextView"
+                    android:layout_below="@+id/line3LinearLayout"
+                    android:layout_centerHorizontal="true"
+                    android:paddingTop="6dp"/>
+
+                <LinearLayout
+                    android:id="@+id/colorsLinearLayout"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/colorsTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:padding="9dp"
+                            android:id="@+id/whiteCheckboxBackground"
+                            android:layout_alignTop="@+id/whiteCheckBox"
+                            android:layout_alignRight="@+id/whiteCheckBox"
+                            android:layout_alignBottom="@id/whiteCheckBox"
+                            android:layout_alignLeft="@id/whiteCheckBox" />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/whiteCheckBox" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:padding="9dp"
+                            android:id="@+id/blueCheckboxBackground"
+                            android:layout_alignTop="@+id/blueCheckBox"
+                            android:layout_alignRight="@+id/blueCheckBox"
+                            android:layout_alignBottom="@id/blueCheckBox"
+                            android:layout_alignLeft="@id/blueCheckBox" />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/blueCheckBox" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:padding="9dp"
+                            android:id="@+id/blackCheckboxBackground"
+                            android:layout_alignTop="@+id/blackCheckBox"
+                            android:layout_alignRight="@+id/blackCheckBox"
+                            android:layout_alignBottom="@id/blackCheckBox"
+                            android:layout_alignLeft="@id/blackCheckBox" />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/blackCheckBox" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:padding="9dp"
+                            android:id="@+id/redCheckboxBackground"
+                            android:layout_alignTop="@+id/redCheckBox"
+                            android:layout_alignRight="@+id/redCheckBox"
+                            android:layout_alignBottom="@id/redCheckBox"
+                            android:layout_alignLeft="@id/redCheckBox" />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/redCheckBox" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:padding="9dp"
+                            android:id="@+id/greenCheckboxBackground"
+                            android:layout_alignTop="@+id/greenCheckBox"
+                            android:layout_alignRight="@+id/greenCheckBox"
+                            android:layout_alignBottom="@id/greenCheckBox"
+                            android:layout_alignLeft="@id/greenCheckBox" />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/greenCheckBox" />
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:padding="9dp"
+                            android:id="@+id/colorlessCheckboxBackground"
+                            android:layout_alignTop="@+id/colorlessCheckBox"
+                            android:layout_alignRight="@+id/colorlessCheckBox"
+                            android:layout_alignBottom="@id/colorlessCheckBox"
+                            android:layout_alignLeft="@id/colorlessCheckBox" />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/colorlessCheckBox" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+
+                <TextView
+                    android:text="Color Identity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/colorIdentityTextView"
+                    android:layout_below="@+id/colorsLinearLayout"
+                    android:layout_centerHorizontal="true"
+                    android:paddingTop="15dp"/>
+
+                <LinearLayout
+                    android:id="@+id/colorIdentityLinearLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/colorIdentityTextView">
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:padding="9dp"
+                            android:id="@+id/whiteIdentityCheckboxBackground"
+                            android:layout_alignTop="@+id/whiteIdentityCheckBox"
+                            android:layout_alignRight="@+id/whiteIdentityCheckBox"
+                            android:layout_alignBottom="@id/whiteIdentityCheckBox"
+                            android:layout_alignLeft="@id/whiteIdentityCheckBox" />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/whiteIdentityCheckBox" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:padding="9dp"
+                            android:id="@+id/blueIdentityCheckboxBackground"
+                            android:layout_alignTop="@+id/blueIdentityCheckBox"
+                            android:layout_alignRight="@+id/blueIdentityCheckBox"
+                            android:layout_alignBottom="@id/blueIdentityCheckBox"
+                            android:layout_alignLeft="@id/blueIdentityCheckBox" />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/blueIdentityCheckBox" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:padding="9dp"
+                            android:id="@+id/blackIdentityCheckboxBackground"
+                            android:layout_alignTop="@+id/blackIdentityCheckBox"
+                            android:layout_alignRight="@+id/blackIdentityCheckBox"
+                            android:layout_alignBottom="@id/blackIdentityCheckBox"
+                            android:layout_alignLeft="@id/blackIdentityCheckBox" />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/blackIdentityCheckBox" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:padding="9dp"
+                            android:id="@+id/redIdentityCheckboxBackground"
+                            android:layout_alignTop="@+id/redIdentityCheckBox"
+                            android:layout_alignRight="@+id/redIdentityCheckBox"
+                            android:layout_alignBottom="@id/redIdentityCheckBox"
+                            android:layout_alignLeft="@id/redIdentityCheckBox" />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/redIdentityCheckBox" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:padding="9dp"
+                            android:id="@+id/greenIdentityCheckboxBackground"
+                            android:layout_alignTop="@+id/greenIdentityCheckBox"
+                            android:layout_alignRight="@+id/greenIdentityCheckBox"
+                            android:layout_alignBottom="@id/greenIdentityCheckBox"
+                            android:layout_alignLeft="@id/greenIdentityCheckBox" />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/greenIdentityCheckBox" />
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:padding="9dp"
+                            android:id="@+id/colorlessIdentityCheckboxBackground"
+                            android:layout_alignTop="@+id/colorlessIdentityCheckBox"
+                            android:layout_alignRight="@+id/colorlessIdentityCheckBox"
+                            android:layout_alignBottom="@id/colorlessIdentityCheckBox"
+                            android:layout_alignLeft="@id/colorlessIdentityCheckBox" />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/colorlessIdentityCheckBox" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/colorIdentityLinearLayout"
+                    android:paddingTop="30dp">
+                    <Button
+                        android:text="Search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/searchButton"
+                        android:layout_centerHorizontal="true"/>
+
+                    <CheckBox
+                        android:text="Collection Only"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/collectionCheckBox"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/searchButton" />
+
+                </RelativeLayout>
+            </RelativeLayout>
+        </ScrollView>
+</RelativeLayout>
+
+
+
+
