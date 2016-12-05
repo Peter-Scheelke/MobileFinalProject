@@ -113,20 +113,21 @@ public class DatabaseManager
         return deck;
     }
 
-    // Get a list of the names of all decks
-    public List<String> GetDeckNames()
+    // Get a list of the names/card counts of all decks
+    public List<Tuple<String, Integer>> GetDecks()
     {
-        List<String> deckNames = new ArrayList<>();
+        List<Tuple<String, Integer>> deckNames = new ArrayList<>();
 
         try
         {
             this.helper.openDataBase();
             Query query = new Query();
-            query.query = "SELECT DISTINCT Name FROM Decks;";
+            query.query = "SELECT Name, COUNT(Quantity) FROM Decks GROUP BY Name;";
             Cursor cursor = this.helper.executeQuery(query.query, query.parameters);
             while (cursor.moveToNext())
             {
-                deckNames.add(cursor.getString(0));
+                Tuple<String, Integer> deck = new Tuple<>(cursor.getString(0), cursor.getInt(1));
+                deckNames.add(deck);
             }
         }
         catch (SQLException e)
