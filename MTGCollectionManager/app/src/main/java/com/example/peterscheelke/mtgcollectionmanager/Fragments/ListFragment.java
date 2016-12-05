@@ -58,7 +58,11 @@ public class ListFragment extends Fragment {
             public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
                 Tuple<String, Integer> item = (Tuple<String, Integer>) (listView.getItemAtPosition(myItemInt));
 
-                FragmentManagementSystem.RequestCard(item.first);
+                try {
+                    FragmentManagementSystem.RequestCard(item.first);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

@@ -24,7 +24,6 @@ public class CardFragment extends Fragment {
 
     private static Card card;
 
-    int blah = 5;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -82,8 +81,8 @@ public class CardFragment extends Fragment {
                 imageView.setImageResource(id);
                 manaCost.addView(imageView);
 
-                imageView.getLayoutParams().height = 70;
-                imageView.getLayoutParams().width = 70;
+                imageView.getLayoutParams().height = 55;
+                imageView.getLayoutParams().width = 55;
             }
         }
     }
@@ -93,13 +92,16 @@ public class CardFragment extends Fragment {
         List<String> symbols = new ArrayList<>();
         StringBuilder builder = new StringBuilder();
 
-        for (int i = 0; i < manaString.length(); ++i)
+        if (manaString != null)
         {
-            builder.append(manaString.charAt(i));
-            if (manaString.charAt(i) == '}')
+            for (int i = 0; i < manaString.length(); ++i)
             {
-                symbols.add(builder.toString());
-                builder.setLength(0);
+                builder.append(manaString.charAt(i));
+                if (manaString.charAt(i) == '}')
+                {
+                    symbols.add(builder.toString());
+                    builder.setLength(0);
+                }
             }
         }
 

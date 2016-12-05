@@ -8,12 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.peterscheelke.mtgcollectionmanager.Cards.Card;
+import com.example.peterscheelke.mtgcollectionmanager.Cards.Color;
 import com.example.peterscheelke.mtgcollectionmanager.FragmentManagementSystem;
 import com.example.peterscheelke.mtgcollectionmanager.R;
+
+import java.util.ArrayList;
 
 /**
  * Created by Peter Scheelke on 12/3/2016.
@@ -95,6 +99,118 @@ public class SearchFragment extends Fragment {
 
         EditText textBox = (EditText) getView().findViewById(R.id.cardNameEditText);
         card.Name = textBox.getText().toString();
+
+        textBox = (EditText) getView().findViewById(R.id.typesEditText);
+        String types = textBox.getText().toString();
+        String[] splitTypes = types.split(" ");
+        card.Types = new ArrayList<>();
+        for (String type : splitTypes) {
+            if (type.length() > 0) {
+                String lowerCase = type.toLowerCase();
+                String firstChar = lowerCase.substring(0,1);
+                String rest = lowerCase.substring(1, lowerCase.length());
+                String complete = firstChar.toUpperCase() + rest;
+                card.Types.add(complete);
+            }
+        }
+
+        textBox = (EditText) getView().findViewById(R.id.subtypesEditText);
+        String subtypes = textBox.getText().toString();
+        String[] splitSubtypes = subtypes.split(" ");
+        card.Subtypes = new ArrayList<>();
+        for (String subtype : splitSubtypes) {
+            if (subtype.length() > 0) {
+                String lowerCase = subtype.toLowerCase();
+                String firstChar = lowerCase.substring(0,1);
+                String rest = lowerCase.substring(1, lowerCase.length());
+                String complete = firstChar.toUpperCase() + rest;
+                card.Subtypes.add(complete);
+            }
+        }
+
+        getSelectedColors(card);
+        getSelectedIdentity(card);
+
         FragmentManagementSystem.RequestSearch(card);
+    }
+
+    private void getSelectedIdentity(Card card) {
+        card.ColorIdentity = new ArrayList<>();
+
+        CheckBox checkBox = (CheckBox) getView().findViewById(R.id.whiteIdentityCheckBox);
+        if (checkBox.isChecked())
+        {
+            card.ColorIdentity.add(Color.White);
+        }
+
+        checkBox = (CheckBox) getView().findViewById(R.id.blueIdentityCheckBox);
+        if (checkBox.isChecked())
+        {
+            card.ColorIdentity.add(Color.Blue);
+        }
+
+        checkBox = (CheckBox) getView().findViewById(R.id.blackIdentityCheckBox);
+        if (checkBox.isChecked())
+        {
+            card.ColorIdentity.add(Color.Black);
+        }
+
+        checkBox = (CheckBox) getView().findViewById(R.id.redIdentityCheckBox);
+        if (checkBox.isChecked())
+        {
+            card.ColorIdentity.add(Color.Red);
+        }
+
+        checkBox = (CheckBox) getView().findViewById(R.id.greenIdentityCheckBox);
+        if (checkBox.isChecked())
+        {
+            card.ColorIdentity.add(Color.Green);
+        }
+
+        checkBox = (CheckBox) getView().findViewById(R.id.colorlessIdentityCheckBox);
+        if (checkBox.isChecked())
+        {
+            card.ColorIdentity.add(Color.None);
+        }
+    }
+
+    private void getSelectedColors(Card card) {
+        card.Colors = new ArrayList<>();
+
+        CheckBox checkBox = (CheckBox) getView().findViewById(R.id.whiteCheckBox);
+        if (checkBox.isChecked())
+        {
+            card.Colors.add(Color.White);
+        }
+
+        checkBox = (CheckBox) getView().findViewById(R.id.blueCheckBox);
+        if (checkBox.isChecked())
+        {
+            card.Colors.add(Color.Blue);
+        }
+
+        checkBox = (CheckBox) getView().findViewById(R.id.blackCheckBox);
+        if (checkBox.isChecked())
+        {
+            card.Colors.add(Color.Black);
+        }
+
+        checkBox = (CheckBox) getView().findViewById(R.id.redCheckBox);
+        if (checkBox.isChecked())
+        {
+            card.Colors.add(Color.Red);
+        }
+
+        checkBox = (CheckBox) getView().findViewById(R.id.greenCheckBox);
+        if (checkBox.isChecked())
+        {
+            card.Colors.add(Color.Green);
+        }
+
+        checkBox = (CheckBox) getView().findViewById(R.id.colorlessCheckBox);
+        if (checkBox.isChecked())
+        {
+            card.Colors.add(Color.None);
+        }
     }
 }

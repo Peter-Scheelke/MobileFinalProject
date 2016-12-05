@@ -5,7 +5,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.peterscheelke.mtgcollectionmanager.Cards.Card;
 import com.example.peterscheelke.mtgcollectionmanager.DatabaseManagement.DatabaseManager;
@@ -26,8 +29,15 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar, menu);
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         this.fragmentManager = getSupportFragmentManager();
 
@@ -35,9 +45,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             int fragmentId = savedInstanceState.getInt(FRAGMENT_KEY);
             this.currentFragment = this.fragmentManager.findFragmentById(fragmentId);
-        }
-        else
-        {
+        } else {
             try {
                 FragmentManagementSystem.Initialize(this, this);
             } catch (IOException e) {
@@ -58,8 +66,15 @@ public class MainActivity extends AppCompatActivity {
         icicle.putInt(FRAGMENT_KEY, this.currentFragment.getId());
     }
 
-    public void inform()
-    {
+    @Override
+    public void onBackPressed() {
+
+        if (!FragmentManagementSystem.GoBack()) {
+            this.moveTaskToBack(true);
+        }
+    }
+
+    public void inform() {
         FragmentTransaction transaction = this.fragmentManager.beginTransaction();
         transaction.remove(currentFragment);
         transaction.commit();
@@ -70,5 +85,15 @@ public class MainActivity extends AppCompatActivity {
         transaction.add(R.id.fragment_frame, this.currentFragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    public void onSearchClick(MenuItem item) {
+        FragmentManagementSystem.GoToHome();
+    }
+
+    public void onCollectionClick(MenuItem item) {
+        Card card = new Card();
+        card.CollectionQuantity = 1;
+        FragmentManagementSystem.RequestSearch(card);
     }
 }

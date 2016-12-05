@@ -15,6 +15,7 @@ import com.example.peterscheelke.mtgcollectionmanager.Fragments.SearchFragment;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Created by Peter Scheelke on 12/4/2016.
@@ -32,6 +33,8 @@ public class FragmentManagementSystem {
     private Context context;
     private DatabaseManager databaseManager;
 
+    private Stack<Fragment> backStack;
+
     private FragmentManagementSystem(Context context, MainActivity clientActivity) throws IOException {
         this.cardFragment = new CardFragment();
         this.listFragment = new ListFragment();
@@ -42,6 +45,7 @@ public class FragmentManagementSystem {
         this.clientActivity = clientActivity;
         DatabaseManager.InitializeManager(context);
         this.databaseManager = DatabaseManager.GetManager();
+        this.backStack = new Stack<>();
     }
 
     public static Fragment getCurrentFragment()
@@ -61,6 +65,7 @@ public class FragmentManagementSystem {
     {
         Card card = uniqueInstance.databaseManager.GetCardByName(name);
         uniqueInstance.cardFragment.SetCard(card);
+        uniqueInstance.backStack.add(uniqueInstance.currentFragment);
         uniqueInstance.currentFragment = uniqueInstance.cardFragment;
         uniqueInstance.clientActivity.inform();
     }
@@ -74,8 +79,10 @@ public class FragmentManagementSystem {
 
             Card cardWithAllInfo = uniqueInstance.databaseManager.GetCardByName(cards.get(0).first);
             uniqueInstance.cardFragment.SetCard(cardWithAllInfo);
+            uniqueInstance.backStack.add(uniqueInstance.currentFragment);
             uniqueInstance.currentFragment = uniqueInstance.cardFragment;
             uniqueInstance.clientActivity.inform();
+            Toast.makeText(uniqueInstance.context, "One Card Found", Toast.LENGTH_SHORT).show();
         }
         else if (cards.size() > 1)
         {
@@ -86,17 +93,39 @@ public class FragmentManagementSystem {
             }
             else
             {
-                header1 = "Cards";
+                header1 = "Card";
             }
 
             String header2 = "Quantity";
             uniqueInstance.listFragment.InitializeFragment(cards, header1, header2);
+            uniqueInstance.backStack.add(uniqueInstance.currentFragment);
             uniqueInstance.currentFragment = uniqueInstance.listFragment;
             uniqueInstance.clientActivity.inform();
+            Toast.makeText(uniqueInstance.context, Integer.toString(cards.size()) + " Cards Found", Toast.LENGTH_SHORT).show();
         }
         else
         {
             Toast.makeText(uniqueInstance.context, "No Cards Found", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public static boolean GoBack()
+    {
+        boolean hasBackFrame = false;
+        if (uniqueInstance.backStack.size() > 0) {
+            uniqueInstance.currentFragment = uniqueInstance.backStack.pop();
+            hasBackFrame = true;
+        }
+
+        uniqueInstance.clientActivity.inform();
+        return hasBackFrame;
+    }
+
+    public static void GoToHome()
+    {
+        uniqueInstance.backStack.clear();
+        uniqueInstance.searchFragment = new SearchFragment();
+        uniqueInstance.currentFragment = uniqueInstance.searchFragment;
+        uniqueInstance.clientActivity.inform();
     }
 }
