@@ -92,9 +92,6 @@ public class SearchFragment extends Fragment {
 
     public void onSearchButtonClick(View v)
     {
-        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-
         Card card = new Card();
 
         EditText textBox = (EditText) getView().findViewById(R.id.cardNameEditText);
@@ -130,6 +127,17 @@ public class SearchFragment extends Fragment {
 
         getSelectedColors(card);
         getSelectedIdentity(card);
+
+        textBox = (EditText) getView().findViewById(R.id.cmcEditText);
+        if (textBox.getText().toString().length() > 0) {
+            card.CMC = Double.parseDouble(textBox.getText().toString());
+        }
+
+        textBox = (EditText) getView().findViewById(R.id.powerEditText);
+        card.Power = textBox.getText().toString();
+
+        textBox = (EditText) getView().findViewById(R.id.toughnessEditText);
+        card.Toughness = textBox.getText().toString();
 
         FragmentManagementSystem.RequestSearch(card);
     }

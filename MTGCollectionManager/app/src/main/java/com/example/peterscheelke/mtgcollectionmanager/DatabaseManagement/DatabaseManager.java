@@ -76,12 +76,11 @@ public class DatabaseManager
     }
 
     // Get all the cards for a single deck
-    public List<Tuple<String, Tuple<Integer, Integer>>> GetDeck(String deckname)
+    public List<Tuple<String, Integer>> GetDeck(String deckname)
     {
-        List<Tuple<String, Tuple<Integer, Integer>>> deck = new ArrayList<>();
+        List<Tuple<String, Integer>> deck = new ArrayList<>();
 
-
-        String queryString = "SELECT Card, DeckQuantity, Quantity FROM (SELECT Card, Quantity AS DeckQuantity FROM Decks WHERE Name = ?) JOIN Cards ON Card = Cards.Name;";
+        String queryString = "SELECT Card, Quantity FROM Decks WHERE Name = ?;";
         String[] parameters = {deckname};
 
         Query query = new Query();
@@ -96,9 +95,7 @@ public class DatabaseManager
             {
                 String name = cursor.getString(0);
                 int deckQuantity = cursor.getInt(1);
-                int collectionQuantity = cursor.getInt(2);
-                Tuple<Integer, Integer> quantities = new Tuple<>(deckQuantity, collectionQuantity);
-                Tuple<String, Tuple<Integer, Integer>> deckData = new Tuple<>(name, quantities);
+                Tuple<String, Integer> deckData = new Tuple<>(name, deckQuantity);
                 deck.add(deckData);
             }
         }
@@ -122,7 +119,7 @@ public class DatabaseManager
         {
             this.helper.openDataBase();
             Query query = new Query();
-            query.query = "SELECT Name, COUNT(Quantity) FROM Decks GROUP BY Name;";
+            query.query = "SELECT Name, SUM(Quantity) FROM Decks GROUP BY Name;";
             Cursor cursor = this.helper.executeQuery(query.query, query.parameters);
             while (cursor.moveToNext())
             {

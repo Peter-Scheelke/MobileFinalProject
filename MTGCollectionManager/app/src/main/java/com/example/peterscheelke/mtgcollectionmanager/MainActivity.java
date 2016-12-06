@@ -96,4 +96,9 @@ public class MainActivity extends AppCompatActivity {
         card.CollectionQuantity = 1;
         FragmentManagementSystem.RequestSearch(card);
     }
+
+    public void onDecksClick(MenuItem item)
+    {
+        FragmentManagementSystem.RequestDecks();
+    }
 }

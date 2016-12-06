@@ -46,11 +46,11 @@ class QueryBuilder
 
         if (this.HasWhere(card))
         {
-            queryString += " AND Quantity >= ?";
+            queryString += " AND Quantity >= CAST(? AS INT)";
         }
         else
         {
-            queryString += " WHERE Quantity >= ?";
+            queryString += " WHERE Quantity >= CAST(? AS INT)";
         }
 
         parameters.add(Integer.toString(card.CollectionQuantity));
@@ -78,37 +78,37 @@ class QueryBuilder
     @NonNull
     private String GetQueryFromCardArgs(Card card, String queryString, List<String> searches, List<String> parameters) {
         if (card != null) {
-            if (card.Name != "") {
+            if (card.Name.length() > 0) {
                 searches.add("Name LIKE ?");
                 parameters.add("%" + card.Name + "%");
             }
 
-            if (card.ManaCost != "") {
+            if (card.ManaCost.length() > 0) {
                 searches.add("ManaCost = ?");
                 parameters.add(card.ManaCost);
             }
 
             if (card.CMC >= 0.0) {
-                searches.add("CMC = ?");
+                searches.add("CMC = CAST(? AS NUMERIC)");
                 parameters.add(card.CMC.toString());
             }
 
-            if (card.CompleteType != "") {
+            if (card.CompleteType.length() > 0) {
                 searches.add("CompleteType LIKE ?");
                 parameters.add("%" + card.CompleteType + "%");
             }
 
-            if (card.Text != "") {
+            if (card.Text.length() > 0) {
                 searches.add("Text LIKE ?");
                 parameters.add("%" + card.Text + "%");
             }
 
-            if (card.Power != "") {
+            if (card.Power.length() > 0) {
                 searches.add("Power = ?");
                 parameters.add(card.Power);
             }
 
-            if (card.Toughness != "") {
+            if (card.Toughness.length() > 0) {
                 searches.add("Toughness = ?");
                 parameters.add(card.Toughness);
             }
@@ -171,16 +171,19 @@ class QueryBuilder
                 }
             }
 
-            if (card.ColorIdentity != null)
-            {
+            if (card.ColorIdentity != null && card.ColorIdentity.size() > 0) {
                 queryString = String.format(JOIN_QUERY, columns, queryString, COLOR_IDENTITIES);
                 queryString += " WHERE Name IN (" + String.format(SELECT_QUERY, "Card", "ColorIdentities", "ColorIdentity", card.ColorIdentity.get(0).toString()) + ")";
                 parameters.add(card.ColorIdentity.get(0).toString());
-                for (int i = 1; i < card.ColorIdentity.size(); ++i)
-                {
+                for (int i = 1; i < card.ColorIdentity.size(); ++i) {
                     queryString += " AND Name IN (" + String.format(SELECT_QUERY, "Card", "ColorIdentities", "ColorIdentity", card.ColorIdentity.get(i).toString()) + ")";
                     parameters.add(card.ColorIdentity.get(i).toString());
                 }
+
+                //private static final String JOIN_QUERY = "SELECT DISTINCT %1$s FROM (%2$s) AS temp JOIN %3$s ON Card = Name";
+                queryString = String.format(JOIN_QUERY, columns, queryString, " (SELECT Card, Count(Card) AS ColorCount FROM ColorIdentities GROUP BY Card) AS ColorCounts");
+                queryString += " WHERE ColorCount <= CAST(? AS INT)";
+                parameters.add(Integer.toString(card.ColorIdentity.size()));
             }
         }
         return queryString;

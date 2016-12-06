@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.example.peterscheelke.mtgcollectionmanager.Cards.Card;
@@ -63,6 +64,7 @@ public class FragmentManagementSystem {
 
     public static void RequestCard(String name)
     {
+        HideKeyboard();
         Card card = uniqueInstance.databaseManager.GetCardByName(name);
         uniqueInstance.cardFragment.SetCard(card);
         uniqueInstance.backStack.add(uniqueInstance.currentFragment);
@@ -70,13 +72,26 @@ public class FragmentManagementSystem {
         uniqueInstance.clientActivity.inform();
     }
 
+    public static void RequestDeck(String name)
+    {
+        HideKeyboard();
+        List<Tuple<String, Integer>> cards = uniqueInstance.databaseManager.GetDeck(name);
+        uniqueInstance.backStack.add(uniqueInstance.currentFragment);
+        uniqueInstance.listFragment.InitializeFragment(cards, "Cards", "Quantity");
+        uniqueInstance.listFragment.setOnClickMode(true);
+
+        uniqueInstance.currentFragment = uniqueInstance.listFragment;
+        uniqueInstance.clientActivity.inform();
+    }
+
     public static void RequestSearch(Card card)
     {
+        HideKeyboard();
         List<Tuple<String, Integer>> cards = uniqueInstance.databaseManager.GetAllCardNames(card);
+        uniqueInstance.listFragment.setOnClickMode(true);
 
         if (cards.size() == 1)
         {
-
             Card cardWithAllInfo = uniqueInstance.databaseManager.GetCardByName(cards.get(0).first);
             uniqueInstance.cardFragment.SetCard(cardWithAllInfo);
             uniqueInstance.backStack.add(uniqueInstance.currentFragment);
@@ -109,6 +124,33 @@ public class FragmentManagementSystem {
         }
     }
 
+    public static void RequestDecks()
+    {
+        HideKeyboard();
+        List<Tuple<String, Integer>> decks = uniqueInstance.databaseManager.GetDecks();
+
+        if (decks.size() == 0) {
+            Toast.makeText(uniqueInstance.context, "No Decks Found", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            ListFragment decksFragment = new ListFragment();
+            decksFragment.setOnClickMode(false);
+            decksFragment.InitializeFragment(decks, "Deck", "Quantity");
+            uniqueInstance.backStack.add(uniqueInstance.currentFragment);
+            uniqueInstance.currentFragment = decksFragment;
+            uniqueInstance.clientActivity.inform();
+
+            if (decks.size() == 1)
+            {
+                Toast.makeText(uniqueInstance.context, "One Deck Found", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                Toast.makeText(uniqueInstance.context, Integer.toString(decks.size()) + " Decks Found", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     public static boolean GoBack()
     {
         boolean hasBackFrame = false;
@@ -128,4 +170,11 @@ public class FragmentManagementSystem {
         uniqueInstance.currentFragment = uniqueInstance.searchFragment;
         uniqueInstance.clientActivity.inform();
     }
+
+    public static void HideKeyboard()
+    {
+        final InputMethodManager imm = (InputMethodManager) uniqueInstance.currentFragment.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(uniqueInstance.currentFragment.getView().getWindowToken(), 0);
+    }
+
 }

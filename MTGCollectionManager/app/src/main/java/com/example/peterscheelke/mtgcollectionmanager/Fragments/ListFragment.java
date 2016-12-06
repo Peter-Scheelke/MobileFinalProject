@@ -24,9 +24,11 @@ import java.util.List;
 
 public class ListFragment extends Fragment {
 
-    private static List<Tuple<String, Integer>> cardsOrDecks;
-    private static String header1 = "";
-    private static String header2 = "";
+    private List<Tuple<String, Integer>> cardsOrDecks;
+    private String header1 = "";
+    private String header2 = "";
+
+    private boolean isInCardMode = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,7 +40,7 @@ public class ListFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        View header = (View)getActivity().getLayoutInflater().inflate(R.layout.listview_row,null);
+        View header = getActivity().getLayoutInflater().inflate(R.layout.listview_row,null);
         TextView name = (TextView) header.findViewById(R.id.name);
         name.setText(header1);
         name.setTypeface(name.getTypeface(), Typeface.BOLD);
@@ -59,7 +61,13 @@ public class ListFragment extends Fragment {
                 Tuple<String, Integer> item = (Tuple<String, Integer>) (listView.getItemAtPosition(myItemInt));
 
                 try {
-                    FragmentManagementSystem.RequestCard(item.first);
+                    if (isInCardMode) {
+                        FragmentManagementSystem.RequestCard(item.first);
+                    }
+                    else
+                    {
+                        FragmentManagementSystem.RequestDeck(item.first);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -69,8 +77,13 @@ public class ListFragment extends Fragment {
 
     public void InitializeFragment(List<Tuple<String, Integer>> nameQuantity, String header1, String header2)
     {
-        cardsOrDecks = nameQuantity;
-        ListFragment.header1 = header1;
-        ListFragment.header2 = header2;
+        this.cardsOrDecks = nameQuantity;
+        this.header1 = header1;
+        this.header2 = header2;
+    }
+
+    public void setOnClickMode(boolean isInCardMode)
+    {
+        this.isInCardMode = isInCardMode;
     }
 }
