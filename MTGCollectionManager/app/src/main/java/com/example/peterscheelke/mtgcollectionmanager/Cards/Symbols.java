@@ -5,10 +5,6 @@ import com.example.peterscheelke.mtgcollectionmanager.R;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Peter Scheelke on 12/4/2016.
- */
-
 public class Symbols {
 
     private static Symbols uniqueInstance = null;

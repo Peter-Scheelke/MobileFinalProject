@@ -7,18 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.example.peterscheelke.mtgcollectionmanager.Cards.Card;
-import com.example.peterscheelke.mtgcollectionmanager.DatabaseManagement.DatabaseManager;
-import com.example.peterscheelke.mtgcollectionmanager.DatabaseManagement.Tuple;
-import com.example.peterscheelke.mtgcollectionmanager.Fragments.CardFragment;
-import com.example.peterscheelke.mtgcollectionmanager.Fragments.ListFragment;
-import com.example.peterscheelke.mtgcollectionmanager.Fragments.SearchFragment;
-
 import java.io.IOException;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -100,5 +92,10 @@ public class MainActivity extends AppCompatActivity {
     public void onDecksClick(MenuItem item)
     {
         FragmentManagementSystem.RequestDecks();
+    }
+
+    public void showToast(String message)
+    {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

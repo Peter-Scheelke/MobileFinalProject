@@ -1,10 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:id="@+id/nameOfCardTextView"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:paddingBottom="20dp"/>
+
+    <TextView
+        android:text="@string/decks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/nameOfCardTextView"
+        android:id="@+id/deckSpinnerLabel"
+        />
 
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@+id/deckSpinnerLabel"
         android:id="@+id/deckSpinner" />
-</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/deckSpinner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/deckLinearLayout">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:id="@+id/deckNameInputEditText"
+            android:hint="@string/deck_name"
+            />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:id="@+id/newDeckButton"
+            android:text="@string/plus"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:id="@+id/removeDeckButton"
+            android:text="@string/minus"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/updateStuffLinearLayout"
+        android:layout_below="@id/deckLinearLayout">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:id="@+id/updateCollectionRelativeLayout">
+
+            <TextView
+                android:text="@string/collection_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="108dp"
+                android:layout_marginEnd="108dp"
+                android:layout_marginTop="39dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/collectionQuantityUpdateLabelTextView"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/collectionQuantityUpdateLabelTextView"
+                android:id="@+id/updateCollectionQuantityEditText"
+                android:hint="@string/qty"
+                android:layout_alignRight="@+id/updateCollectionQuantityButton"
+                android:layout_alignEnd="@+id/updateCollectionQuantityButton" />
+
+            <Button
+                android:text="@string/update"
+                android:layout_below="@id/updateCollectionQuantityEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:id="@+id/updateCollectionQuantityButton"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_gravity="right"
+            android:id="@+id/updateDeckRelativeLayout">
+
+            <TextView
+                android:text="@string/deck_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="108dp"
+                android:layout_marginEnd="108dp"
+                android:layout_marginTop="39dp"
+                android:id="@+id/deckQuantityUpdateLabelTextView"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:layout_below="@+id/deckQuantityUpdateLabelTextView"
+                android:id="@+id/updateDeckQuantityEditText"
+                android:hint="@string/qty"
+                android:layout_alignRight="@+id/updateDeckQuantityButton"
+                android:layout_alignEnd="@+id/updateDeckQuantityButton" />
+
+            <Button
+                android:text="@string/update"
+                android:layout_below="@id/updateDeckQuantityEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:id="@+id/updateDeckQuantityButton"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

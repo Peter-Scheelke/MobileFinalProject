@@ -9,7 +9,9 @@ import com.example.peterscheelke.mtgcollectionmanager.Cards.Color;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // A singleton class that accesses the database of MTG cards
 public class DatabaseManager
@@ -139,6 +141,46 @@ public class DatabaseManager
         return deckNames;
     }
 
+    public List<Tuple<String, Integer>> GetDecksWithCardQuantities(String cardName)
+    {
+        List<Tuple<String, Integer>> decksAndQuantities = new ArrayList<>();
+
+        // Get all the decks the card is in
+        String queryString = "SELECT Name, Quantity FROM Decks WHERE Card = ?";
+        List<String> parameters = new ArrayList<>();
+        parameters.add(cardName);
+
+        Query query = new Query();
+        query.query = queryString;
+        query.parameters = parameters.toArray(new String[0]);
+
+        uniqueInstance.helper.openDataBase();
+        Cursor cursor = uniqueInstance.helper.executeQuery(query.query, query.parameters);
+
+        Map<String, Integer> deckMap = new HashMap<>();
+        while (cursor.moveToNext())
+        {
+            deckMap.put(cursor.getString(0), cursor.getInt(1));
+        }
+
+        query.query = "SELECT DISTINCT Name FROM Decks";
+        cursor = uniqueInstance.helper.executeQuery(query.query, null);
+        while (cursor.moveToNext())
+        {
+            String deck = cursor.getString(0);
+            int quantity = 0;
+            if (deckMap.containsKey(deck))
+            {
+                quantity = deckMap.get(deck);
+            }
+
+            decksAndQuantities.add(new Tuple<>(deck, quantity));
+        }
+
+        uniqueInstance.helper.close();
+        return decksAndQuantities;
+    }
+
     // Get the details of a single card
     public Card GetCardByName(String name)
     {
@@ -212,10 +254,6 @@ public class DatabaseManager
         {
             e.printStackTrace();
         }
-        catch (IllegalArgumentException e)
-        {
-            e.printStackTrace();
-        }
         finally
         {
             this.helper.close();
@@ -224,6 +262,7 @@ public class DatabaseManager
         return card;
     }
 
+    @Deprecated
     // Get the details of a single card including its quantity in a given deck
     public Card GetCardByName(String name, String deck)
     {

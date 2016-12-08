@@ -18,10 +18,6 @@ import com.example.peterscheelke.mtgcollectionmanager.R;
 
 import java.util.List;
 
-/**
- * Created by Peter Scheelke on 12/4/2016.
- */
-
 public class ListFragment extends Fragment {
 
     private List<Tuple<String, Integer>> cardsOrDecks;

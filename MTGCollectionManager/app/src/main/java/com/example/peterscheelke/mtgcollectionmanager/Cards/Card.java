@@ -2,10 +2,6 @@ package com.example.peterscheelke.mtgcollectionmanager.Cards;
 
 import java.util.ArrayList;
 
-/**
- * Created by Peter Scheelke on 11/29/2016.
- */
-
 public class Card
 {
     public String Name = "";

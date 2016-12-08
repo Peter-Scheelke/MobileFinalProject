@@ -6,7 +6,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
-import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,10 +13,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+// This code came from http://blog.reigndesign.com/blog/using-your-own-sqlite-database-in-android-applications/
 
 class DataBaseHelper extends SQLiteOpenHelper{
 
-    //The Android's default system path of your application database.
+    //The Android's default system path of your application database.z
     private static String DB_PATH = "/data/data/com.example.peterscheelke.mtgcollectionmanager/databases/";
 
     private static String DB_NAME = "mtgdatabase.db";

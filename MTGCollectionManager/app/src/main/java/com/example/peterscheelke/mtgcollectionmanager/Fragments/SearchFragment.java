@@ -1,12 +1,10 @@
 package com.example.peterscheelke.mtgcollectionmanager.Fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -19,9 +17,6 @@ import com.example.peterscheelke.mtgcollectionmanager.R;
 
 import java.util.ArrayList;
 
-/**
- * Created by Peter Scheelke on 12/3/2016.
- */
 
 public class SearchFragment extends Fragment {
 
@@ -139,6 +134,9 @@ public class SearchFragment extends Fragment {
         textBox = (EditText) getView().findViewById(R.id.toughnessEditText);
         card.Toughness = textBox.getText().toString();
 
+        textBox = (EditText) getView().findViewById(R.id.cardTextEditText);
+        card.Text = textBox.getText().toString();
+
         FragmentManagementSystem.RequestSearch(card);
     }
 
@@ -219,6 +217,12 @@ public class SearchFragment extends Fragment {
         if (checkBox.isChecked())
         {
             card.Colors.add(Color.None);
+        }
+
+        checkBox = (CheckBox) getView().findViewById(R.id.collectionCheckBox);
+        if (checkBox.isChecked())
+        {
+            card.CollectionQuantity = 1;
         }
     }
 }

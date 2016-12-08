@@ -7,10 +7,6 @@ import com.example.peterscheelke.mtgcollectionmanager.Cards.Card;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Peter Scheelke on 12/2/2016.
- */
-
 // Used to create complicated search queries
 class QueryBuilder
 {
@@ -29,11 +25,11 @@ class QueryBuilder
     private static final String JOIN_QUERY = "SELECT DISTINCT %1$s FROM (%2$s) AS temp JOIN %3$s ON Card = Name";
     private static final String SELECT_QUERY = "SELECT DISTINCT %1$s FROM %2$s WHERE %3$s = ?";
 
-    public QueryBuilder()
+    QueryBuilder()
     {
     }
 
-    public Query CreateQuery(Card card)
+    Query CreateQuery(Card card)
     {
         String columns = CARD_COLUMNS;
         String queryString = String.format(BASE_QUERY, columns, CARDS);
@@ -63,13 +59,39 @@ class QueryBuilder
     private boolean HasWhere(Card card)
     {
         if (card != null) {
-            if (card.Name != "") return true;
-            if (card.ManaCost != "") return true;
-            if (card.CMC >= 0.0) return true;
-            if (card.CompleteType != "") return true;
-            if (card.Text != "") return true;
-            if (card.Power != "") return true;
-            if (card.Toughness != "") return true;
+            if (card.Name.length() > 0) {
+                return true;
+            }
+            else if (card.ManaCost.length() > 0) {
+                return true;
+            }
+            else if (card.CMC >= 0.0) {
+                return true;
+            }
+            else if (card.CompleteType.length() > 0) {
+                return true;
+            }
+            else if (card.Text.length() > 0) {
+                return true;
+            }
+            else if (card.Power.length() > 0) {
+                return true;
+            }
+            else if (card.Toughness.length() > 0) {
+                return true;
+            }
+            else if (card.Types != null && card.Types.size() > 0) {
+                return true;
+            }
+            else if (card.Subtypes != null && card.Subtypes.size() > 0) {
+                return true;
+            }
+            else if (card.Colors != null && card.Colors.size() > 0) {
+                return true;
+            }
+            else if (card.ColorIdentity != null && card.ColorIdentity.size() > 0) {
+                return true;
+            }
         }
 
         return false;
@@ -162,21 +184,21 @@ class QueryBuilder
             if (card.Colors != null && card.Colors.size() > 0)
             {
                 queryString = String.format(JOIN_QUERY, columns, queryString, COLORS);
-                queryString += " WHERE Name IN (" + String.format(SELECT_QUERY, "Card", "Colors", "Color", card.Colors.get(0).toString()) + ")";
+                queryString += " WHERE Name IN (" + String.format(SELECT_QUERY, "Card", "Colors", "Color") + ")";
                 parameters.add(card.Colors.get(0).toString());
                 for (int i = 1; i < card.Colors.size(); ++i)
                 {
-                    queryString += " AND Name IN (" + String.format(SELECT_QUERY, "Card", "Colors", "Color", card.Colors.get(i).toString()) + ")";
+                    queryString += " AND Name IN (" + String.format(SELECT_QUERY, "Card", "Colors", "Color") + ")";
                     parameters.add(card.Colors.get(i).toString());
                 }
             }
 
             if (card.ColorIdentity != null && card.ColorIdentity.size() > 0) {
                 queryString = String.format(JOIN_QUERY, columns, queryString, COLOR_IDENTITIES);
-                queryString += " WHERE Name IN (" + String.format(SELECT_QUERY, "Card", "ColorIdentities", "ColorIdentity", card.ColorIdentity.get(0).toString()) + ")";
+                queryString += " WHERE Name IN (" + String.format(SELECT_QUERY, "Card", "ColorIdentities", "ColorIdentity") + ")";
                 parameters.add(card.ColorIdentity.get(0).toString());
                 for (int i = 1; i < card.ColorIdentity.size(); ++i) {
-                    queryString += " AND Name IN (" + String.format(SELECT_QUERY, "Card", "ColorIdentities", "ColorIdentity", card.ColorIdentity.get(i).toString()) + ")";
+                    queryString += " AND Name IN (" + String.format(SELECT_QUERY, "Card", "ColorIdentities", "ColorIdentity") + ")";
                     parameters.add(card.ColorIdentity.get(i).toString());
                 }
 
@@ -187,5 +209,9 @@ class QueryBuilder
             }
         }
         return queryString;
+    }
+
+    public void showToastMessage(String message) {
+
     }
 }

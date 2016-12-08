@@ -5,20 +5,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.peterscheelke.mtgcollectionmanager.Cards.Card;
 import com.example.peterscheelke.mtgcollectionmanager.Cards.Symbols;
+import com.example.peterscheelke.mtgcollectionmanager.FragmentManagementSystem;
 import com.example.peterscheelke.mtgcollectionmanager.R;
 
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Created by Peter Scheelke on 12/4/2016.
- */
 
 public class CardFragment extends Fragment {
 
@@ -34,8 +32,13 @@ public class CardFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        //ImageView imageView = (ImageView) getView().findViewById(R.id.whiteCheckboxBackground);
-        //imageView.setImageResource(R.drawable.whitemana);
+        Button button = (Button) getView().findViewById(R.id.updateButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onUpdateClick(v);
+            }
+        });
 
         if (card != null)
         {
@@ -106,5 +109,9 @@ public class CardFragment extends Fragment {
         }
 
         return symbols;
+    }
+
+    public void onUpdateClick(View v) {
+        FragmentManagementSystem.RequestUpdate(this.card.Name);
     }
 }

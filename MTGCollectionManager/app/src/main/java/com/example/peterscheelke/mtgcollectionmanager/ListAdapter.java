@@ -1,6 +1,7 @@
 package com.example.peterscheelke.mtgcollectionmanager;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +18,8 @@ import android.app.Activity;
 // http://kb4dev.com/tutorial/android-listview/custom-adapters-in-android
 public class ListAdapter extends ArrayAdapter<Tuple<String, Integer>>{
 
-    List<Tuple<String, Integer>> dataItems = null;
-    Context context;
+    private List<Tuple<String, Integer>> dataItems = null;
+    private Context context;
 
     public ListAdapter(Context context, List<Tuple<String, Integer>> objects) {
         super(context, R.layout.listview_row, objects);
@@ -27,6 +28,7 @@ public class ListAdapter extends ArrayAdapter<Tuple<String, Integer>>{
         this.dataItems = objects;
     }
 
+    @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub

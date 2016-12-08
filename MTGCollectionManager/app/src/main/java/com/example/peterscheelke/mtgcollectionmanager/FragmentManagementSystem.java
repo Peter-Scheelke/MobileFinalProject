@@ -2,10 +2,7 @@ package com.example.peterscheelke.mtgcollectionmanager;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.example.peterscheelke.mtgcollectionmanager.Cards.Card;
 import com.example.peterscheelke.mtgcollectionmanager.DatabaseManagement.DatabaseManager;
@@ -13,14 +10,11 @@ import com.example.peterscheelke.mtgcollectionmanager.DatabaseManagement.Tuple;
 import com.example.peterscheelke.mtgcollectionmanager.Fragments.CardFragment;
 import com.example.peterscheelke.mtgcollectionmanager.Fragments.ListFragment;
 import com.example.peterscheelke.mtgcollectionmanager.Fragments.SearchFragment;
+import com.example.peterscheelke.mtgcollectionmanager.Fragments.UpdateFragment;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Stack;
-
-/**
- * Created by Peter Scheelke on 12/4/2016.
- */
 
 public class FragmentManagementSystem {
 
@@ -31,8 +25,8 @@ public class FragmentManagementSystem {
     private SearchFragment searchFragment;
     private Fragment currentFragment;
     private MainActivity clientActivity;
-    private Context context;
     private DatabaseManager databaseManager;
+    private UpdateFragment updateFragment;
 
     private Stack<Fragment> backStack;
 
@@ -40,22 +34,22 @@ public class FragmentManagementSystem {
         this.cardFragment = new CardFragment();
         this.listFragment = new ListFragment();
         this.searchFragment = new SearchFragment();
+        this.updateFragment = new UpdateFragment();
         this.currentFragment = this.searchFragment;
 
-        this.context = context;
         this.clientActivity = clientActivity;
         DatabaseManager.InitializeManager(context);
         this.databaseManager = DatabaseManager.GetManager();
         this.backStack = new Stack<>();
     }
 
-    public static Fragment getCurrentFragment()
+    static Fragment getCurrentFragment()
     {
         return uniqueInstance.currentFragment;
     }
 
 
-    public static void Initialize(Context context, MainActivity clientActivity) throws IOException {
+    static void Initialize(Context context, MainActivity clientActivity) throws IOException {
         if (uniqueInstance == null)
         {
             uniqueInstance = new FragmentManagementSystem(context, clientActivity);
@@ -97,11 +91,11 @@ public class FragmentManagementSystem {
             uniqueInstance.backStack.add(uniqueInstance.currentFragment);
             uniqueInstance.currentFragment = uniqueInstance.cardFragment;
             uniqueInstance.clientActivity.inform();
-            Toast.makeText(uniqueInstance.context, "One Card Found", Toast.LENGTH_SHORT).show();
+            uniqueInstance.clientActivity.showToast("One Card Found");
         }
         else if (cards.size() > 1)
         {
-            String header1 = "";
+            String header1;
             if (card.CollectionQuantity > 0)
             {
                 header1 = "Collection";
@@ -116,21 +110,55 @@ public class FragmentManagementSystem {
             uniqueInstance.backStack.add(uniqueInstance.currentFragment);
             uniqueInstance.currentFragment = uniqueInstance.listFragment;
             uniqueInstance.clientActivity.inform();
-            Toast.makeText(uniqueInstance.context, Integer.toString(cards.size()) + " Cards Found", Toast.LENGTH_SHORT).show();
+            uniqueInstance.clientActivity.showToast(Integer.toString(cards.size()) + " Cards Found");
         }
         else
         {
-            Toast.makeText(uniqueInstance.context, "No Cards Found", Toast.LENGTH_LONG).show();
+            uniqueInstance.clientActivity.showToast("No Cards Found");
         }
     }
 
-    public static void RequestDecks()
+    public static void RequestUpdate(String cardName) {
+        Card card = uniqueInstance.databaseManager.GetCardByName(cardName);
+        List<Tuple<String, Integer>> decksAndQuantities = uniqueInstance.databaseManager.GetDecksWithCardQuantities(cardName);
+        uniqueInstance.updateFragment.initializeFragment(card.Name, decksAndQuantities, card.CollectionQuantity);
+        uniqueInstance.backStack.add(uniqueInstance.currentFragment);
+        uniqueInstance.currentFragment = uniqueInstance.updateFragment;
+        uniqueInstance.clientActivity.inform();
+    }
+
+    public static void UpdateCollectionQuantity(String cardName, int quantity) {
+        try {
+            uniqueInstance.databaseManager.UpdateCollectionQuantity(cardName, quantity);
+            String message = "Quantity of %1$s updated to %2$s.";
+            message = String.format(message, cardName, quantity);
+            uniqueInstance.clientActivity.showToast(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+            uniqueInstance.clientActivity.showToast("There was an error updating the database.");
+        }
+    }
+
+    public static void UpdateDeckQuantity(String cardName, String deckName, int quantity) {
+        try {
+            uniqueInstance.databaseManager.UpdateDeckQuantity(cardName, deckName, quantity);
+            String message = "Quantity of %1$s in %2$s updated to %3$s.";
+            message = String.format(message, cardName, deckName, quantity);
+            uniqueInstance.clientActivity.showToast(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+            uniqueInstance.clientActivity.showToast("There was an error updating the database.");
+        }
+    }
+
+
+    static void RequestDecks()
     {
         HideKeyboard();
         List<Tuple<String, Integer>> decks = uniqueInstance.databaseManager.GetDecks();
 
         if (decks.size() == 0) {
-            Toast.makeText(uniqueInstance.context, "No Decks Found", Toast.LENGTH_SHORT).show();
+            uniqueInstance.clientActivity.showToast("No Decks Found");
         }
         else {
             ListFragment decksFragment = new ListFragment();
@@ -142,16 +170,16 @@ public class FragmentManagementSystem {
 
             if (decks.size() == 1)
             {
-                Toast.makeText(uniqueInstance.context, "One Deck Found", Toast.LENGTH_SHORT).show();
+                uniqueInstance.clientActivity.showToast("One Deck Found");
             }
             else
             {
-                Toast.makeText(uniqueInstance.context, Integer.toString(decks.size()) + " Decks Found", Toast.LENGTH_SHORT).show();
+                uniqueInstance.clientActivity.showToast(Integer.toString(decks.size()) + " Decks Found");
             }
         }
     }
 
-    public static boolean GoBack()
+    static boolean GoBack()
     {
         boolean hasBackFrame = false;
         if (uniqueInstance.backStack.size() > 0) {
@@ -163,7 +191,7 @@ public class FragmentManagementSystem {
         return hasBackFrame;
     }
 
-    public static void GoToHome()
+    static void GoToHome()
     {
         uniqueInstance.backStack.clear();
         uniqueInstance.searchFragment = new SearchFragment();
@@ -171,10 +199,12 @@ public class FragmentManagementSystem {
         uniqueInstance.clientActivity.inform();
     }
 
-    public static void HideKeyboard()
+    private static void HideKeyboard()
     {
-        final InputMethodManager imm = (InputMethodManager) uniqueInstance.currentFragment.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(uniqueInstance.currentFragment.getView().getWindowToken(), 0);
-    }
+        if (uniqueInstance.currentFragment.getView().getWindowToken() != null) {
+            final InputMethodManager imm = (InputMethodManager) uniqueInstance.currentFragment.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(uniqueInstance.currentFragment.getView().getWindowToken(), 0);
+        }
 
+    }
 }
