@@ -8,18 +8,18 @@
         android:actionViewClass="android.support.v7.widget.SearchView"
         android:icon="@drawable/ic_search_black_24dp"
         android:title="Collection"
-        android:onClick="onCollectionClick" />
+        android:onClick="onCollectionMenuClick" />
     <item
         android:id="@+id/decksMenuButton"
         android:actionViewClass="android.support.v7.widget.SearchView"
         android:icon="@drawable/ic_search_black_24dp"
         android:title="Decks"
-        android:onClick="onDecksClick" />
+        android:onClick="onDecksMenuClick" />
 
     <item
         android:id="@+id/searchMenuButton"
         android:actionViewClass="android.support.v7.widget.SearchView"
         android:icon="@drawable/ic_search_black_24dp"
         android:title="Search"
-        android:onClick="onSearchClick" />
+        android:onClick="onSearchMenuClick" />
 </menu>

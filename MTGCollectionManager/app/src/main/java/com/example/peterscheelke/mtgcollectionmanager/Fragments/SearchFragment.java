@@ -1,5 +1,6 @@
 package com.example.peterscheelke.mtgcollectionmanager.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,9 +11,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.example.peterscheelke.mtgcollectionmanager.BackendManager;
 import com.example.peterscheelke.mtgcollectionmanager.Cards.Card;
 import com.example.peterscheelke.mtgcollectionmanager.Cards.Color;
-import com.example.peterscheelke.mtgcollectionmanager.FragmentManagementSystem;
+import com.example.peterscheelke.mtgcollectionmanager.MainActivity;
 import com.example.peterscheelke.mtgcollectionmanager.R;
 
 import java.util.ArrayList;
@@ -31,6 +33,10 @@ public class SearchFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         this.setUpCheckboxBackgrounds();
 
+        this.SetUpEventHandlers();
+    }
+
+    private void SetUpEventHandlers() {
         Button button = (Button) getView().findViewById(R.id.searchButton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,8 +142,6 @@ public class SearchFragment extends Fragment {
 
         textBox = (EditText) getView().findViewById(R.id.cardTextEditText);
         card.Text = textBox.getText().toString();
-
-        FragmentManagementSystem.RequestSearch(card);
     }
 
     private void getSelectedIdentity(Card card) {
@@ -224,5 +228,13 @@ public class SearchFragment extends Fragment {
         {
             card.CollectionQuantity = 1;
         }
+
+        this.StartSearchResultActivity(card);
+    }
+
+    private void StartSearchResultActivity(Card card) {
+        BackendManager.GetManager().RequestSearchResults(card);
+        Intent intent= new Intent(getContext(), MainActivity.class);
+        startActivity(intent);
     }
 }

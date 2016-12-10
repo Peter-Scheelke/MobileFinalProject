@@ -1,5 +1,6 @@
 package com.example.peterscheelke.mtgcollectionmanager;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -7,16 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
-
-import com.example.peterscheelke.mtgcollectionmanager.Cards.Card;
-import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String FRAGMENT_KEY = "FragmentKey";
 
-    private Fragment currentFragment;
+    private Fragment currentFragment = null;
 
     private FragmentManager fragmentManager;
 
@@ -33,21 +32,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         this.fragmentManager = getSupportFragmentManager();
 
-
         if (savedInstanceState != null) {
             int fragmentId = savedInstanceState.getInt(FRAGMENT_KEY);
             this.currentFragment = this.fragmentManager.findFragmentById(fragmentId);
-        } else {
-            try {
-                FragmentManagementSystem.Initialize(this, this);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        }
+        else {
+            BackendManager.InitializeManager(this);
+            BackendManager.GetManager().ActivityCreationRequest(this);
+            BackendManager.GetManager().RequestNextFragment(this);
+        }
+    }
 
-            this.currentFragment = FragmentManagementSystem.getCurrentFragment();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
+    public void SetFragment(Fragment fragment) {
+        if (this.currentFragment == null)
+        {
+            this.currentFragment = fragment;
+            FragmentTransaction transaction = this.fragmentManager.beginTransaction();
             transaction.add(R.id.fragment_frame, this.currentFragment);
-            transaction.addToBackStack(null);
             transaction.commit();
         }
     }
@@ -59,40 +60,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-
-        if (!FragmentManagementSystem.GoBack()) {
-            this.moveTaskToBack(true);
-        }
+    public void onResume(){
+        super.onResume();
     }
 
-    public void inform() {
-        FragmentTransaction transaction = this.fragmentManager.beginTransaction();
-        transaction.remove(currentFragment);
-        transaction.commit();
-
-        this.currentFragment = FragmentManagementSystem.getCurrentFragment();
-
-        transaction = this.fragmentManager.beginTransaction();
-        transaction.add(R.id.fragment_frame, this.currentFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
-    public void onSearchClick(MenuItem item) {
-        FragmentManagementSystem.GoToHome();
+    public void onSearchMenuClick(MenuItem item) {
+        BackendManager.GetManager().RequestSearchForm();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
-    public void onCollectionClick(MenuItem item) {
-        Card card = new Card();
-        card.CollectionQuantity = 1;
-        FragmentManagementSystem.RequestSearch(card);
+    public void onCollectionMenuClick(MenuItem item) {
+        BackendManager.GetManager().RequestCollection();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
-    public void onDecksClick(MenuItem item)
+    public void onDecksMenuClick(MenuItem item)
     {
-        FragmentManagementSystem.RequestDecks();
+        BackendManager.GetManager().RequestAllDecks();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
+
 
     public void showToast(String message)
     {

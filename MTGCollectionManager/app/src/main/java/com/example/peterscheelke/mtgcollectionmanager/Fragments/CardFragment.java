@@ -1,5 +1,6 @@
 package com.example.peterscheelke.mtgcollectionmanager.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,9 +11,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.peterscheelke.mtgcollectionmanager.BackendManager;
 import com.example.peterscheelke.mtgcollectionmanager.Cards.Card;
 import com.example.peterscheelke.mtgcollectionmanager.Cards.Symbols;
-import com.example.peterscheelke.mtgcollectionmanager.FragmentManagementSystem;
+import com.example.peterscheelke.mtgcollectionmanager.MainActivity;
 import com.example.peterscheelke.mtgcollectionmanager.R;
 
 import java.util.ArrayList;
@@ -20,7 +22,18 @@ import java.util.List;
 
 public class CardFragment extends Fragment {
 
-    private static Card card;
+    private static Card templateCard = null;
+
+    private static final String NAME_KEY = "NameKey";
+    private static final String TEXT_KEY = "TextKey";
+    private static final String COMPLETE_TYPE_KEY = "CompleteTypeKey";
+    private static final String POWER_KEY = "Power_Key";
+    private static final String TOUGHNESS_KEY = "ToughnessKey";
+    private static final String MANA_COST_KEY = "ManaCostKey";
+    private static final String CARD_IS_INITIALIZED_KEY = "CardIsInitializedKey";
+
+    private  boolean cardInitialized = false;
+    private Card card = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,13 +45,21 @@ public class CardFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Button button = (Button) getView().findViewById(R.id.updateButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onUpdateClick(v);
-            }
-        });
+        if (savedInstanceState != null)
+        {
+            this.cardInitialized = savedInstanceState.getBoolean(CARD_IS_INITIALIZED_KEY);
+        }
+
+        if (!cardInitialized)
+        {
+            card = templateCard;
+            templateCard = null;
+            cardInitialized = true;
+        }
+        else
+        {
+            this.restoreState(savedInstanceState);
+        }
 
         if (card != null)
         {
@@ -63,11 +84,20 @@ public class CardFragment extends Fragment {
             addManaCost();
         }
 
+        Button button = (Button) getView().findViewById(R.id.updateQuantitiesButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BackendManager.GetManager().RequestCardUpdate(card.Name);
+                Intent intent= new Intent(getContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
-    public void SetCard(Card card)
+    public static void SetCard(Card card)
     {
-        CardFragment.card = card;
+        CardFragment.templateCard = card;
     }
 
     private void addManaCost(){
@@ -111,7 +141,28 @@ public class CardFragment extends Fragment {
         return symbols;
     }
 
-    public void onUpdateClick(View v) {
-        FragmentManagementSystem.RequestUpdate(this.card.Name);
+    @Override
+    public void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+
+        state.putString(NAME_KEY, this.card.Name);
+        state.putString(TEXT_KEY, this.card.Text);
+        state.putString(COMPLETE_TYPE_KEY, this.card.CompleteType);
+        state.putString(POWER_KEY, this.card.Power);
+        state.putString(TOUGHNESS_KEY, this.card.Toughness);
+        state.putString(MANA_COST_KEY, this.card.ManaCost);
+        state.putBoolean(CARD_IS_INITIALIZED_KEY, this.cardInitialized);
+    }
+
+    private void restoreState(Bundle state) {
+        if (state != null) {
+            this.card = new Card();
+            this.card.Name = state.getString(NAME_KEY);
+            this.card.Text = state.getString(TEXT_KEY);
+            this.card.CompleteType = state.getString(COMPLETE_TYPE_KEY);
+            this.card.Power = state.getString(POWER_KEY);
+            this.card.Toughness = state.getString(TOUGHNESS_KEY);
+            this.card.ManaCost = state.getString(MANA_COST_KEY);
+        }
     }
 }

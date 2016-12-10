@@ -82,7 +82,7 @@ public class DatabaseManager
     {
         List<Tuple<String, Integer>> deck = new ArrayList<>();
 
-        String queryString = "SELECT Card, Quantity FROM Decks WHERE Name = ?;";
+        String queryString = "SELECT Card, Quantity FROM Decks WHERE Name = ? AND NOT Card IS NULL;";
         String[] parameters = {deckname};
 
         Query query = new Query();
@@ -262,37 +262,6 @@ public class DatabaseManager
         return card;
     }
 
-    @Deprecated
-    // Get the details of a single card including its quantity in a given deck
-    public Card GetCardByName(String name, String deck)
-    {
-        Card card = this.GetCardByName(name);
-
-        try
-        {
-            Query query = new Query();
-            query.query = "SELECT Quantity FROM Decks WHERE Name = ? AND Card = ?";
-            String[] parameters = {deck, name};
-            query.parameters = parameters;
-            this.helper.openDataBase();
-            Cursor cursor = this.helper.executeQuery(query.query, query.parameters);
-            while (cursor.moveToNext())
-            {
-                card.DeckQuantity = cursor.getInt(0);
-            }
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            this.helper.close();
-        }
-
-        return card;
-    }
-
     // Update a card's collection quantity
     public void UpdateCollectionQuantity(String name, int quantity)
     {
@@ -351,5 +320,48 @@ public class DatabaseManager
         {
             this.helper.close();
         }
+    }
+
+    public boolean CreateDeck(String deckName)
+    {
+        try {
+            Query query = new Query();
+            query.query = "SELECT Name FROM Decks WHERE Name = ?;";
+            query.parameters = new String[] {deckName};
+
+            uniqueInstance.helper.openDataBase();
+
+            Cursor cursor = uniqueInstance.helper.executeQuery(query.query, query.parameters);
+            if (cursor.getCount() == 0)
+            {
+                query.query = "INSERT INTO Decks (Name) VALUES (?);";
+                uniqueInstance.helper.executeNonQuery(query.query, query.parameters);
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            uniqueInstance.helper.close();
+        }
+
+        return false;
+    }
+
+    public boolean DeleteDeck(String deckName) {
+        try
+        {
+            uniqueInstance.helper.openDataBase();
+            Query query = new Query();
+            query.query = "DELETE FROM Decks WHERE Name = ?;";
+            query.parameters = new String[] {deckName};
+            uniqueInstance.helper.executeNonQuery(query.query, query.parameters);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            uniqueInstance.helper.close();
+        }
+
+        return true;
     }
 }
