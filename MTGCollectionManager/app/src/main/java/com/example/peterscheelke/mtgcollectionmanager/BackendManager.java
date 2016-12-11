@@ -118,7 +118,14 @@ public class BackendManager {
             fragment.InitializeFragment(decks, "Deck", "Cards");
             fragment.setOnClickMode(false); // Will open a deck instead of a card if this is false
             this.fragmentToAddToMostRecentActivity = fragment;
-            this.ShowMessageShort(this.mostRecentActivity, String.format("%1$s decks found",decks.size()));
+            if (decks.size() == 1) {
+                this.ShowMessageShort(this.mostRecentActivity, String.format("One deck found",decks.size()));
+            }
+            else
+            {
+                this.ShowMessageShort(this.mostRecentActivity, String.format("%1$s decks found",decks.size()));
+            }
+
             return true;
         }
         else

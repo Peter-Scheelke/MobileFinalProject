@@ -1,8 +1,13 @@
 package com.example.peterscheelke.mtgcollectionmanager.Fragments;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +24,8 @@ import com.example.peterscheelke.mtgcollectionmanager.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CardFragment extends Fragment {
 
@@ -70,7 +77,8 @@ public class CardFragment extends Fragment {
             completeType.setText(card.CompleteType);
 
             TextView text = (TextView) getView().findViewById(R.id.cardText);
-            text.setText(card.Text);
+            text.setText(this.GetStringWithSymbols(card.Text));
+            this.GetStringWithSymbols(card.Text);
 
             TextView stats = (TextView) getView().findViewById(R.id.powerToughness);
             if (card.Power != null && card.Toughness != null) {
@@ -166,5 +174,35 @@ public class CardFragment extends Fragment {
             this.card.Toughness = state.getString(TOUGHNESS_KEY);
             this.card.ManaCost = state.getString(MANA_COST_KEY);
         }
+    }
+
+    private SpannableString GetStringWithSymbols(String text) {
+        Pattern pattern = Pattern.compile("(\\{.*?\\})");
+        Matcher matcher = pattern.matcher(text);
+
+
+        List<String> symbols = new ArrayList<>();
+        List<Integer> indices = new ArrayList<>();
+        while (matcher.find())
+        {
+            symbols.add(matcher.group(1));
+            indices.add(matcher.start());
+        }
+
+        SpannableString spannableString = new SpannableString(text);
+
+        for (int i = 0; i < symbols.size(); ++i) {
+            this.InsertSymbol(symbols.get(i), indices.get(i), spannableString);
+        }
+
+        return spannableString;
+    }
+
+    private void InsertSymbol(String symbol, int index, SpannableString spannableString) {
+
+        Drawable drawableSymbol = ContextCompat.getDrawable(getContext(), Symbols.getIdFromSymbol(symbol));
+        drawableSymbol.setBounds(0, 0, 50, 50);
+        ImageSpan span = new ImageSpan(drawableSymbol, ImageSpan.ALIGN_BASELINE);
+        spannableString.setSpan(span, index, index + symbol.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
     }
 }
