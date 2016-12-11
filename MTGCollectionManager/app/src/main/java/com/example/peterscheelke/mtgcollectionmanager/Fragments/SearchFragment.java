@@ -142,6 +142,8 @@ public class SearchFragment extends Fragment {
 
         textBox = (EditText) getView().findViewById(R.id.cardTextEditText);
         card.Text = textBox.getText().toString();
+
+        this.StartSearchResultActivity(card);
     }
 
     private void getSelectedIdentity(Card card) {
@@ -228,8 +230,6 @@ public class SearchFragment extends Fragment {
         {
             card.CollectionQuantity = 1;
         }
-
-        this.StartSearchResultActivity(card);
     }
 
     private void StartSearchResultActivity(Card card) {
