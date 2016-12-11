@@ -78,6 +78,8 @@ public class ListFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        BackendManager.HideKeyboardFrom(getContext(), new View(getContext()));
     }
 
     public void InitializeFragment(List<Tuple<String, Integer>> nameQuantity, String header1, String header2)

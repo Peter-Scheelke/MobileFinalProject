@@ -93,6 +93,8 @@ public class CardFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        BackendManager.HideKeyboardFrom(getContext(), new View(getContext()));
     }
 
     public static void SetCard(Card card)

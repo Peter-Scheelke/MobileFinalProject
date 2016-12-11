@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.peterscheelke.mtgcollectionmanager.BackendManager;
 import com.example.peterscheelke.mtgcollectionmanager.DatabaseManagement.Tuple;
 import com.example.peterscheelke.mtgcollectionmanager.R;
 
@@ -101,7 +102,7 @@ public class UpdateFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onUpdateDeckClick(v);
+                onUpdateDeckQuantityClick(v);
             }
         });
     }
@@ -113,12 +114,12 @@ public class UpdateFragment extends Fragment {
 
     private void InitializeSpinner() {
         Spinner spinner = (Spinner) getView().findViewById(R.id.deckSpinner);
-        List<String> decknames = new ArrayList<>();
+        List<String> deckNames = new ArrayList<>();
         for (Tuple<String, Integer> deck : deckQuantities) {
-            decknames.add(deck.first);
+            deckNames.add(deck.first);
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, decknames);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, deckNames);
         spinner.setAdapter(adapter);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -150,52 +151,68 @@ public class UpdateFragment extends Fragment {
     {
         EditText editText = (EditText) getView().findViewById(R.id.updateCollectionQuantityEditText);
         int quantity = Integer.parseInt(editText.getText().toString());
-        //FragmentManagementSystem.UpdateCollectionQuantity(this.cardName, quantity);
+        BackendManager.GetManager().UpdateCollectionQuantity(this.cardName, quantity);
     }
 
     public void onRemoveDeckClick(View v) {
         if (currentIndex != -1) {
-            /*
-            if (FragmentManagementSystem.DeleteDeck(currentDeck)) {
-                deckQuantities.remove(currentIndex);
-                currentIndex = -1;
-                currentDeck = "";
+            if (BackendManager.GetManager().RemoveDeck(currentDeck)){
+                BackendManager.GetManager().ShowMessageShort(getContext(), String.format("Deck %1$s removed", this.currentDeck));
+                this.deckQuantities.remove(this.currentIndex);
+
+                if (this.deckQuantities.size() > 0) {
+                    this.currentIndex = 0;
+                    this.currentDeck = this.deckQuantities.get(0).first;
+                }
+                else
+                {
+                    this.currentIndex = -1;
+                    this.currentDeck = "";
+                }
 
                 Spinner spinner = (Spinner) getView().findViewById(R.id.deckSpinner);
                 List<String> deckNames = new ArrayList<>();
                 for (Tuple<String, Integer> deck : deckQuantities) {
                     deckNames.add(deck.first);
                 }
+
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, deckNames);
                 spinner.setAdapter(adapter);
-            }*/
+            }
         }
     }
 
     public void onAddDeckClick(View v) {
         EditText editText = (EditText) getView().findViewById(R.id.deckNameInputEditText);
         String newDeckName = editText.getText().toString();
+        if (!newDeckName.equals(""))
+        {
+            if (BackendManager.GetManager().CreateDeck(newDeckName)) {
+                editText.setText("");
+                deckQuantities.add(new Tuple<>(newDeckName, 0));
+                Spinner spinner = (Spinner) getView().findViewById(R.id.deckSpinner);
+                List<String> deckNames = new ArrayList<>();
+                for (Tuple<String, Integer> deck : deckQuantities) {
+                    deckNames.add(deck.first);
+                }
 
-        /*
-        if (FragmentManagementSystem.CreateDeck(newDeckName)) {
-            editText.setText("");
-            deckQuantities.add(new Tuple<>(newDeckName, 0));
-            Spinner spinner = (Spinner) getView().findViewById(R.id.deckSpinner);
-            List<String> deckNames = new ArrayList<>();
-            for (Tuple<String, Integer> deck : deckQuantities) {
-                deckNames.add(deck.first);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, deckNames);
+                spinner.setAdapter(adapter);
+                spinner.setSelection(deckNames.size() - 1);
+                this.currentDeck = deckNames.get(deckNames.size() - 1);
+                this.currentIndex = deckNames.size() - 1;
+                BackendManager.GetManager().ShowMessageShort(getContext(), String.format("Deck %1$s added", this.currentDeck));
+                BackendManager.HideKeyboardFrom(getContext(), new View(getContext()));
             }
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, deckNames);
-            spinner.setAdapter(adapter);
-        }*/
+        }
     }
 
-    public void onUpdateDeckClick(View v) {
+    public void onUpdateDeckQuantityClick(View v) {
         if (currentIndex != -1)
         {
             EditText editText = (EditText) getView().findViewById(R.id.updateDeckQuantityEditText);
             int quantity = Integer.parseInt(editText.getText().toString());
-            //FragmentManagementSystem.UpdateDeckQuantity(cardName, deckQuantities.get(currentIndex).first, quantity);
+            BackendManager.GetManager().UpdateDeckQuantity(this.cardName, this.currentDeck, quantity);
         }
     }
 

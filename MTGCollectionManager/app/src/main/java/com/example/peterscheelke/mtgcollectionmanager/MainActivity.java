@@ -8,8 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         else {
             BackendManager.InitializeManager(this);
             BackendManager.GetManager().ActivityCreationRequest(this);
-            BackendManager.GetManager().RequestNextFragment(this);
         }
     }
 
@@ -69,28 +66,31 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        BackendManager.GetManager().GoBack();
+    }
+
     public void onSearchMenuClick(MenuItem item) {
-        BackendManager.GetManager().RequestSearchForm();
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        if (BackendManager.GetManager().RequestSearchForm()) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void onCollectionMenuClick(MenuItem item) {
-        BackendManager.GetManager().RequestCollection();
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        if (BackendManager.GetManager().RequestCollection()) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void onDecksMenuClick(MenuItem item)
     {
-        BackendManager.GetManager().RequestAllDecks();
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
-
-
-    public void showToast(String message)
-    {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        if (BackendManager.GetManager().RequestAllDecks()) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 }

@@ -233,8 +233,9 @@ public class SearchFragment extends Fragment {
     }
 
     private void StartSearchResultActivity(Card card) {
-        BackendManager.GetManager().RequestSearchResults(card);
-        Intent intent= new Intent(getContext(), MainActivity.class);
-        startActivity(intent);
+        if (BackendManager.GetManager().RequestSearchResults(card)) {
+            Intent intent = new Intent(getContext(), MainActivity.class);
+            startActivity(intent);
+        }
     }
 }
