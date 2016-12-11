@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
         setContentView(R.layout.activity_main);
         this.fragmentManager = getSupportFragmentManager();
@@ -67,8 +68,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onStop() { super.onStop(); }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         BackendManager.GetManager().GoBack();
     }
 

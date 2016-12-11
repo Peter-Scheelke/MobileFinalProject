@@ -211,8 +211,7 @@ public class BackendManager {
     }
 
     public void GoBack() {
-        if (this.backStack.size() > 0)
-        {
+        if (this.backStack.size() > 0) {
             this.backStack.pop();
         }
     }
