@@ -224,7 +224,7 @@ public class CardFragment extends Fragment {
         {
             return;
         }
-        
+
         if (drawableSymbol == null) {
             return;
         }
