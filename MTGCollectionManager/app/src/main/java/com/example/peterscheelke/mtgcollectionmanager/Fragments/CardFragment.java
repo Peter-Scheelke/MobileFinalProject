@@ -77,7 +77,16 @@ public class CardFragment extends Fragment {
             completeType.setText(card.CompleteType);
 
             TextView text = (TextView) getView().findViewById(R.id.cardText);
-            text.setText(this.GetStringWithSymbols(card.Text));
+            SpannableString spannableString = this.GetStringWithSymbols(card.Text);
+            if (spannableString != null)
+            {
+                text.setText(spannableString);
+            }
+            else
+            {
+                text.setText("");
+            }
+
             this.GetStringWithSymbols(card.Text);
 
             TextView stats = (TextView) getView().findViewById(R.id.powerToughness);
@@ -177,6 +186,12 @@ public class CardFragment extends Fragment {
     }
 
     private SpannableString GetStringWithSymbols(String text) {
+
+        if (text == null)
+        {
+            return null;
+        }
+
         Pattern pattern = Pattern.compile("(\\{.*?\\})");
         Matcher matcher = pattern.matcher(text);
 
@@ -200,7 +215,20 @@ public class CardFragment extends Fragment {
 
     private void InsertSymbol(String symbol, int index, SpannableString spannableString) {
 
-        Drawable drawableSymbol = ContextCompat.getDrawable(getContext(), Symbols.getIdFromSymbol(symbol));
+        int id = Symbols.getIdFromSymbol(symbol);
+        Drawable drawableSymbol;
+        if (id != 0) {
+            drawableSymbol = ContextCompat.getDrawable(getContext(), id);
+        }
+        else
+        {
+            return;
+        }
+        
+        if (drawableSymbol == null) {
+            return;
+        }
+
         drawableSymbol.setBounds(0, 0, 50, 50);
         ImageSpan span = new ImageSpan(drawableSymbol, ImageSpan.ALIGN_BASELINE);
         spannableString.setSpan(span, index, index + symbol.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
