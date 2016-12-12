@@ -154,30 +154,34 @@ public class DatabaseManager
         query.query = queryString;
         query.parameters = parameters.toArray(new String[0]);
 
-        uniqueInstance.helper.openDataBase();
-        Cursor cursor = uniqueInstance.helper.executeQuery(query.query, query.parameters);
+        try {
+            uniqueInstance.helper.openDataBase();
+            Cursor cursor = uniqueInstance.helper.executeQuery(query.query, query.parameters);
 
-        Map<String, Integer> deckMap = new HashMap<>();
-        while (cursor.moveToNext())
-        {
-            deckMap.put(cursor.getString(0), cursor.getInt(1));
-        }
-
-        query.query = "SELECT DISTINCT Name FROM Decks";
-        cursor = uniqueInstance.helper.executeQuery(query.query, null);
-        while (cursor.moveToNext())
-        {
-            String deck = cursor.getString(0);
-            int quantity = 0;
-            if (deckMap.containsKey(deck))
+            Map<String, Integer> deckMap = new HashMap<>();
+            while (cursor.moveToNext())
             {
-                quantity = deckMap.get(deck);
+                deckMap.put(cursor.getString(0), cursor.getInt(1));
             }
 
-            decksAndQuantities.add(new Tuple<>(deck, quantity));
-        }
+            query.query = "SELECT DISTINCT Name FROM Decks";
+            cursor = uniqueInstance.helper.executeQuery(query.query, null);
+            while (cursor.moveToNext())
+            {
+                String deck = cursor.getString(0);
+                int quantity = 0;
+                if (deckMap.containsKey(deck))
+                {
+                    quantity = deckMap.get(deck);
+                }
 
-        uniqueInstance.helper.close();
+                decksAndQuantities.add(new Tuple<>(deck, quantity));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            uniqueInstance.helper.close();
+        }
         return decksAndQuantities;
     }
 
